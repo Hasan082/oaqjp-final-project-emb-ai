@@ -22,7 +22,25 @@ def emotion_detector(text_to_analyse):
         # Check if the response is successful
         # and return the JSON response or an error message.
         if response.status_code == 200:
-            return response.text 
+            result = response.json()
+            emotions = result['emotionPredictions'][0]['emotion']
+            anger_score = emotions.get('anger', 0)
+            disgust_score = emotions.get('disgust', 0)
+            fear_score = emotions.get('fear', 0)
+            joy_score = emotions.get('sadness', 0)
+            sadness_score = emotions.get('anger', 0)
+            
+            # Find the dominant emotion
+            dominant_emotion = max(emotions, key=emotions.get)
+
+            return {
+                'anger': anger_score,
+                'disgust': disgust_score,
+                'fear': fear_score,
+                'joy': joy_score,
+                'sadness': sadness_score,
+                'dominant_emotion': dominant_emotion
+            }
         else:
             return {
                 "error": "Failed to detect emotions",
